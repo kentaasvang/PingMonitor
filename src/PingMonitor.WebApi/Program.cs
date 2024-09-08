@@ -1,7 +1,7 @@
+using PingMonitor.WebApi;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PingMonitor.WebApi;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +11,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Auth
+builder.Services.AddAuthentication();
+
+// Database and user stores
 builder.Services.AddDatabase();
 builder.Services.AddIdentity();
+
 
 var app = builder.Build();
 
@@ -49,6 +53,9 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi()
 .RequireAuthorization();
 
+app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
+    .RequireAuthorization();
+
 app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager, [FromBody] object empty) =>
 {
     if (empty != null)
@@ -59,6 +66,7 @@ app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager, [FromBo
 
     return Results.Unauthorized();
 })
+.WithName("Logout")
 .WithOpenApi()
 .RequireAuthorization();
 
