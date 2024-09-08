@@ -57,6 +57,16 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi()
 .RequireAuthorization();
 
+app.MapPost("add-domain", async (ApplicationDbContext dbContext, [FromBody] DomainEntity domain) =>
+{
+    var pinglogs = new PingLogEntity();
+    domain.PingLog = pinglogs; 
+    dbContext.Domains.Add(domain);
+    await dbContext.SaveChangesAsync();
+    return Results.Created($"/domain/{domain.Id}", domain);
+});
+
+
 app.MapPost("/logout", async (SignInManager<ApplicationUserEntity> signInManager, [FromBody] object empty) =>
 {
     if (empty != null)
