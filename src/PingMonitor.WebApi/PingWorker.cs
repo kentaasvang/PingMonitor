@@ -1,4 +1,4 @@
-//using System.Net.NetworkInformation;
+using System.Net.NetworkInformation;
  
 namespace PingMonitor.WebApi;
 
@@ -23,8 +23,12 @@ public class PingWorker : BackgroundService
             //using var scope = _serviceScopeFactory.CreateScope();
             //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            //var ping = new Ping();
-            //var pingResult = await ping.SendPingAsync("google.com");
+            var ping = new Ping();
+            var pingResult = await ping.SendPingAsync("google.com");
+            
+            _logger.LogDebug("Ping result: {result}", pingResult.Status);
+            _logger.LogDebug("Roundtrip time: {time}", pingResult.RoundtripTime);
+            _logger.LogDebug("Date: {date}", DateTimeOffset.Now);
 
             /*
             var pingLog = new PingLog
