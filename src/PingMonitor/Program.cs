@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PingMonitor;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

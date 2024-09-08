@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+namespace PingMonitor;
+
 public static class ConfigureServices
 {
     public static void AddDatabase(this IServiceCollection services)
