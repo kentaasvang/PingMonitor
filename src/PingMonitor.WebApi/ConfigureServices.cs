@@ -17,4 +17,9 @@ public static class ConfigureServices
         services.AddIdentityApiEndpoints<IdentityUser>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
     }
+
+    public static void AddPingWorker(this IServiceCollection services)
+    {
+        services.AddHostedService<PingWorker>();
+    }
 }

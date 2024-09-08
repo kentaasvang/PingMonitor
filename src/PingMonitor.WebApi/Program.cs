@@ -15,6 +15,7 @@ builder.Services.AddAuthorization();
 // Database and user stores
 builder.Services.AddDatabase();
 builder.Services.AddIdentity();
+builder.Services.AddPingWorker();
 
 
 var app = builder.Build();
