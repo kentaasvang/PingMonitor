@@ -1,1 +1,1 @@
-dotnet build src/PingMonitor/
+dotnet build src/PingMonitor.WebApi/

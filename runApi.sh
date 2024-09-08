@@ -1,1 +1,1 @@
-dotnet run --project src/PingMonitor/
+dotnet run --project src/PingMonitor.WebApi/

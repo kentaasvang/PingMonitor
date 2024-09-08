@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace PingMonitor;
+namespace PingMonitor.WebApi;
 
 public static class ConfigureServices
 {
