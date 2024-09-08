@@ -5,12 +5,12 @@ namespace PingMonitor.WebApi;
 public class PingWorker : BackgroundService
 {
     private readonly ILogger<PingWorker> _logger;
-    //private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly PingWorkerSettings _settings;
 
-    public PingWorker(ILogger<PingWorker> logger /*,IServiceScopeFactory serviceScopeFactory*/)
+    public PingWorker(ILogger<PingWorker> logger, PingWorkerSettings settings)
     {
         _logger = logger;
-        //_serviceScopeFactory = serviceScopeFactory;
+        _settings = settings;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -20,30 +20,17 @@ public class PingWorker : BackgroundService
         {
             _logger.LogInformation("PingWorker running at: {time}", DateTimeOffset.Now);
 
-            //using var scope = _serviceScopeFactory.CreateScope();
-            //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
             var ping = new Ping();
+
             var pingResult = await ping.SendPingAsync("google.com");
             
             _logger.LogDebug("Ping result: {result}", pingResult.Status);
             _logger.LogDebug("Roundtrip time: {time}", pingResult.RoundtripTime);
             _logger.LogDebug("Date: {date}", DateTimeOffset.Now);
 
-            /*
-            var pingLog = new PingLog
-            {
-                Date = DateTimeOffset.Now,
-                Success = pingResult.Status == IPStatus.Success,
-                RoundtripTime = pingResult.RoundtripTime
-            };
-            */
+            _logger.LogDebug("Waiting for {interval} milliseconds", _settings.IntervalInMilliseconds);
 
-            // dbContext.PingLogs.Add(pingLog);
-            
-            //await dbContext.SaveChangesAsync();
-
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(_settings.IntervalInMilliseconds, stoppingToken);
         }
     }
 }

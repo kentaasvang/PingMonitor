@@ -18,8 +18,12 @@ public static class ConfigureServices
             .AddEntityFrameworkStores<ApplicationDbContext>();
     }
 
-    public static void AddPingWorker(this IServiceCollection services)
+    public static void AddPingWorker(this IServiceCollection services, IConfiguration config)
     {
+        var settings = config.GetSection("PingWorkerSettings").Get<PingWorkerSettings>()
+            ?? throw new InvalidOperationException("PingWorkerSettings not found in configuration");
+
+        services.AddSingleton<PingWorkerSettings>(settings);
         services.AddHostedService<PingWorker>();
     }
 }
