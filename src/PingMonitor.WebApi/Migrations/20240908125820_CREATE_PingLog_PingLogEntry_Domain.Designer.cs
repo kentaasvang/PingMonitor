@@ -8,11 +8,11 @@ using PingMonitor.WebApi;
 
 #nullable disable
 
-namespace PingMonitor.Migrations
+namespace PingMonitor.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240907095615_Initial")]
-    partial class Initial
+    [Migration("20240908125820_CREATE_PingLog_PingLogEntry_Domain")]
+    partial class CREATE_PingLog_PingLogEntry_Domain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,6 +212,62 @@ namespace PingMonitor.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PingMonitor.WebApi.Entities.DomainEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PingLogId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PingLogId");
+
+                    b.ToTable("Domains");
+                });
+
+            modelBuilder.Entity("PingMonitor.WebApi.Entities.PingLogEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PingLogs");
+                });
+
+            modelBuilder.Entity("PingMonitor.WebApi.PingLogEntryEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PingLogEntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("RoundtripTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PingLogEntityId");
+
+                    b.ToTable("PingLogEntries");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -261,6 +317,29 @@ namespace PingMonitor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PingMonitor.WebApi.Entities.DomainEntity", b =>
+                {
+                    b.HasOne("PingMonitor.WebApi.Entities.PingLogEntity", "PingLog")
+                        .WithMany()
+                        .HasForeignKey("PingLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PingLog");
+                });
+
+            modelBuilder.Entity("PingMonitor.WebApi.PingLogEntryEntity", b =>
+                {
+                    b.HasOne("PingMonitor.WebApi.Entities.PingLogEntity", null)
+                        .WithMany("PingLogItems")
+                        .HasForeignKey("PingLogEntityId");
+                });
+
+            modelBuilder.Entity("PingMonitor.WebApi.Entities.PingLogEntity", b =>
+                {
+                    b.Navigation("PingLogItems");
                 });
 #pragma warning restore 612, 618
         }

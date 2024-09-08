@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PingMonitor.Migrations
+namespace PingMonitor.WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class CREATE_PingLog_PingLogEntry_Domain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,17 @@ namespace PingMonitor.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PingLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PingLogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +167,45 @@ namespace PingMonitor.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Domains",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Host = table.Column<string>(type: "TEXT", nullable: false),
+                    PingLogId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Domains", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Domains_PingLogs_PingLogId",
+                        column: x => x.PingLogId,
+                        principalTable: "PingLogs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PingLogEntries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    Success = table.Column<bool>(type: "INTEGER", nullable: false),
+                    RoundtripTime = table.Column<long>(type: "INTEGER", nullable: false),
+                    PingLogEntityId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PingLogEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PingLogEntries_PingLogs_PingLogEntityId",
+                        column: x => x.PingLogEntityId,
+                        principalTable: "PingLogs",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +242,16 @@ namespace PingMonitor.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Domains_PingLogId",
+                table: "Domains",
+                column: "PingLogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PingLogEntries_PingLogEntityId",
+                table: "PingLogEntries",
+                column: "PingLogEntityId");
         }
 
         /// <inheritdoc />
@@ -213,10 +273,19 @@ namespace PingMonitor.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Domains");
+
+            migrationBuilder.DropTable(
+                name: "PingLogEntries");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PingLogs");
         }
     }
 }
