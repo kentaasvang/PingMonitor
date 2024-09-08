@@ -1,0 +1,6 @@
+@PingMonitor_HostAddress = http://localhost:5038
+
+GET {{PingMonitor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
