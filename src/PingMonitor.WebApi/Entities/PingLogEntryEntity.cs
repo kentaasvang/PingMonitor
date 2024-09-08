@@ -6,6 +6,7 @@ public class PingLogEntryEntity
     public DateTimeOffset Date { get; set; }
     public bool Success { get; set; }
     public long RoundtripTime { get; set; }
+    public Guid PingLogEntityId { get; set; }
 }
 
 

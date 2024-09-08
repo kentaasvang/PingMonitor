@@ -1,4 +1,5 @@
 using PingMonitor.WebApi;
+using PingMonitor.WebApi.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ builder.Services.AddAuthorization();
 // Database and user stores
 builder.Services.AddDatabase();
 builder.Services.AddIdentity();
+builder.Services.AddRepositories();
 
 // Workers
 builder.Services.AddPingWorker(builder.Configuration);
@@ -22,7 +24,7 @@ builder.Services.AddPingWorker(builder.Configuration);
 var app = builder.Build();
 
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<ApplicationUserEntity>();
 
 
 // Configure the HTTP request pipeline.
@@ -55,7 +57,7 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi()
 .RequireAuthorization();
 
-app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager, [FromBody] object empty) =>
+app.MapPost("/logout", async (SignInManager<ApplicationUserEntity> signInManager, [FromBody] object empty) =>
 {
     if (empty != null)
     {

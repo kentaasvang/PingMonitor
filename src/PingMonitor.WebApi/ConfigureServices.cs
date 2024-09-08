@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PingMonitor.WebApi.Entities;
 
 namespace PingMonitor.WebApi;
-
 public static class ConfigureServices
 {
     public static void AddDatabase(this IServiceCollection services)
@@ -14,7 +13,7 @@ public static class ConfigureServices
 
     public static void AddIdentity(this IServiceCollection services)
     {
-        services.AddIdentityApiEndpoints<IdentityUser>()
+        services.AddIdentityApiEndpoints<ApplicationUserEntity>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
     }
 

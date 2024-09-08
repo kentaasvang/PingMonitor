@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PingMonitor.WebApi;
 
-public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUserEntity, IdentityRole<Guid>, Guid>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
