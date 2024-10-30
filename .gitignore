@@ -4,7 +4,7 @@
 ## Get latest from `dotnet new gitignore`
 
 # Misc
-app.db**
+pingmonitor.db
 
 # dotenv files
 .env
